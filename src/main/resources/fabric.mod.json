@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "twitch-plays-mc",
+  "version": "${version}",
+
+  "name": "Twitch Plays MC",
+  "description": "Takes chat comments as button inputs to move the player",
+  "authors": [
+    "EDDxample"
+  ],
+  "contact": {
+    "homepage": "https://github.com/EDDxample/twitch-plays-mc",
+    "sources": "https://github.com/EDDxample/twitch-plays-mc"
+  },
+
+  "license": "GNU LGPL V3",
+  "icon": "assets/chat-plays-mc/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": []
+  },
+  "mixins": [
+    "twitch-plays-mc.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+	"fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
