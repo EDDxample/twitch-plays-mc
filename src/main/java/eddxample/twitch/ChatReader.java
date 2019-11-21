@@ -9,8 +9,10 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class ChatReader {
+
     private static final Pattern user_patt = Pattern.compile("(?<=^:)\\w+(?=!)");
-    private static final Pattern msg_patt  = Pattern.compile("^:\\w+!\\w+@\\w+\\.tmi\\.twitch\\.tv PRIVMSG #\\w+ :");
+    private static final String msg_patt = "^:\\w+!\\w+@\\w+\\.tmi\\.twitch\\.tv PRIVMSG #\\w+ :";
+
     private static Socket socket;
     private static BufferedReader in;
     private static DataOutputStream out;
@@ -39,12 +41,18 @@ public class ChatReader {
     public static void process_response(String res) throws IOException {
         if (res.startsWith("PING :tmi.twitch.tv")) {
             out.write("PONG :tmi.twitch.tv\n\r".getBytes("utf-8"));
-        } else if (!res.startsWith(":justinfan420!")) {
+        } else if (!(res.startsWith(":justinfan420") || res.startsWith(":tmi.twitch.tv "))) {
             Matcher m = user_patt.matcher(res);
+            if (m.find()) {
+                String user = m.group(0);
+                String msg = res.replaceFirst(msg_patt, "");
+                System.out.println(String.format("<%s> %s", user, msg));
+            } else {
+                System.out.println("----ERROR----\n" + res + "\n----");
+            }
         }
     }
     public static void main(String[] args) {
-        Matcher m = user_patt.matcher(":hmms185!hmms185@hmms185.tmi.twitch.tv PRIVMSG #rubius :una sub para mi por favor");
-        System.out.println(m.group());
+        start("loeya");
     }
 }
