@@ -44,8 +44,9 @@ public class ChatReader {
 
         } catch (IOException | NullPointerException e) { e.printStackTrace(); }
         finally {
-            MinecraftClient.getInstance().player.sendMessage(new TranslatableText(String.format("[§dTPMC§r] Disconnected", channel)));
+            MinecraftClient.getInstance().player.sendMessage(new TranslatableText(String.format("[§dTPMC§r] Disconnected from %s", channel)));
             stop();
+            channel = null;
         }
     }
 
