@@ -17,7 +17,7 @@ public class ChatReader {
     private static final String msg_patt = "^:\\w+!\\w+@\\w+\\.tmi\\.twitch\\.tv PRIVMSG #\\w+ :";
 
 
-    public static String channel = null;
+    public static String channel;
     public static Thread chatReader;
 
     private static Socket socket;
@@ -32,7 +32,7 @@ public class ChatReader {
 
     public static void connect() {
         try {
-            MinecraftClient.getInstance().player.sendMessage(new TranslatableText(String.format("[§dTPMC§r] Listening to §6%s's§r chat...", channel)));
+            MinecraftClient.getInstance().player.sendMessage(new TranslatableText(String.format("[§dTPMC§r]§7 Listening to §6%s's§7 chat...§r", channel)));
             socket = new Socket("irc.chat.twitch.tv", 6667);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new DataOutputStream(socket.getOutputStream());
@@ -44,7 +44,7 @@ public class ChatReader {
 
         } catch (IOException | NullPointerException e) { e.printStackTrace(); }
         finally {
-            MinecraftClient.getInstance().player.sendMessage(new TranslatableText(String.format("[§dTPMC§r] Disconnected from %s", channel)));
+            MinecraftClient.getInstance().player.sendMessage(new TranslatableText(String.format("[§dTPMC§r]§7 Disconnected from §6%s§r", channel)));
             stop();
             channel = null;
         }

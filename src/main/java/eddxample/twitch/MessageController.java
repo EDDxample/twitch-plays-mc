@@ -1,7 +1,7 @@
 package eddxample.twitch;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.LiteralText;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,7 +25,7 @@ public class MessageController {
 
         if (isCommand) flags.replace(msg, timestamp);
 
-        try { MinecraftClient.getInstance().player.sendMessage(new TranslatableText(String.format(isCommand ? "<§e%s§r> §6§l%s§r" : "<§5%s§r> %s§r", user, msg))); }
+        try { MinecraftClient.getInstance().player.sendMessage(new LiteralText(String.format(isCommand ? "<§e%s§r> §6§l%s§r" : "<§5%s§r> %s§r", user, msg))); }
         catch (NullPointerException e) {}
     }
 
