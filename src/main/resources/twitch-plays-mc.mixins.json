@@ -3,8 +3,8 @@
   "package": "eddxample.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "ServerTickMixin",
-    "KeyboardInputMixin"
+    "KeyboardInputMixin",
+    "CommandManagerMixin"
   ],
   "client": [
   ],

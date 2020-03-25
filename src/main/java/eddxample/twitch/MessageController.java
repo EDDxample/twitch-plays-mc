@@ -8,28 +8,29 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MessageController {
 
     public static Map<String, Long> flags = new ConcurrentHashMap<>();
-    static long timestamp = System.currentTimeMillis();
+    public static long timestamp = System.currentTimeMillis();
+    public static boolean twitchPlays;
 
     static {
-        flags.put("L", 0L);
-        flags.put("R", 0L);
-        flags.put("F", 0L);
-        flags.put("B", 0L);
+        flags.put("A", 0L);
+        flags.put("D", 0L);
+        flags.put("W", 0L);
+        flags.put("S", 0L);
         flags.put("J", 0L);
     }
 
     public static void process(String user, String msg) {
 
-        boolean isCommand = msg.length() == 1 && flags.containsKey(msg);
+        boolean isCommand = twitchPlays && msg.length() == 1 && flags.containsKey(msg);
 
         if (isCommand) flags.replace(msg, timestamp);
 
-        try { MinecraftClient.getInstance().player.sendMessage(new TranslatableText(String.format(isCommand ? "<§e%s§r> §l%s§r" : "<§5%s§r> §7%s§r", user, msg))); }
+        try { MinecraftClient.getInstance().player.sendMessage(new TranslatableText(String.format(isCommand ? "<§e%s§r> §6§l%s§r" : "<§5%s§r> %s§r", user, msg))); }
         catch (NullPointerException e) {}
     }
 
     public static boolean shouldPress(String s) {
-        return System.currentTimeMillis() - flags.get(s) < 300L;
+        return timestamp - flags.get(s) < 300L;
     }
 
 

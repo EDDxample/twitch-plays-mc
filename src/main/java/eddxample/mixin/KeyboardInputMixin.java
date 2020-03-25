@@ -19,20 +19,22 @@ public class KeyboardInputMixin extends Input {
 
     @Inject(method = "tick" , at = @At("HEAD"), cancellable = true)
     public void tick(boolean bl, CallbackInfo ci) {
-        this.pressingForward = this.settings.keyForward.isPressed() || MessageController.flags.get("F");
-        this.pressingBack = this.settings.keyBack.isPressed() || MessageController.flags.get("B");
-        this.pressingLeft = this.settings.keyLeft.isPressed() || MessageController.flags.get("L");
-        this.pressingRight = this.settings.keyRight.isPressed() || MessageController.flags.get("R");
+        if (!MessageController.twitchPlays) return;
+
+        MessageController.update();
+
+        this.pressingForward = MessageController.shouldPress("W");
+        this.pressingBack = MessageController.shouldPress("S");
+        this.pressingLeft = MessageController.shouldPress("A");
+        this.pressingRight = MessageController.shouldPress("D");
         this.movementForward = this.pressingForward == this.pressingBack ? 0.0F : (this.pressingForward ? 1.0F : -1.0F);
         this.movementSideways = this.pressingLeft == this.pressingRight ? 0.0F : (this.pressingLeft ? 1.0F : -1.0F);
-        this.jumping = this.settings.keyJump.isPressed() || MessageController.flags.get("J");
+        this.jumping = MessageController.shouldPress("J");
         this.sneaking = this.settings.keySneak.isPressed();
         if (bl) {
             this.movementSideways = (float)((double)this.movementSideways * 0.3D);
             this.movementForward = (float)((double)this.movementForward * 0.3D);
         }
-
-        MessageController.resetAll();
         ci.cancel();
     }
 }
