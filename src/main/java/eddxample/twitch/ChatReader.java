@@ -13,6 +13,10 @@ public class ChatReader {
     private static final Pattern user_patt = Pattern.compile("(?<=^:)\\w+(?=!)");
     private static final String msg_patt = "^:\\w+!\\w+@\\w+\\.tmi\\.twitch\\.tv PRIVMSG #\\w+ :";
 
+
+    public static String twitchChannel = "eddxample";
+    public static Thread chatReader = new Thread(() -> start(twitchChannel));
+
     private static Socket socket;
     private static BufferedReader in;
     private static DataOutputStream out;
@@ -47,12 +51,13 @@ public class ChatReader {
                 String user = m.group(0);
                 String msg = res.replaceFirst(msg_patt, "");
                 System.out.println(String.format("<%s> %s", user, msg));
+                MessageController.process(user,msg);
             } else {
                 System.out.println("----ERROR----\n" + res + "\n----");
             }
         }
     }
     public static void main(String[] args) {
-        start("loeya");
+
     }
 }
