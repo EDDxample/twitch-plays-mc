@@ -25,6 +25,7 @@ public class ChatReader {
     private static DataOutputStream out;
 
     public static void start(String c) {
+        chatReader = null;
         channel = c;
         chatReader = new Thread(ChatReader::connect);
         chatReader.start();

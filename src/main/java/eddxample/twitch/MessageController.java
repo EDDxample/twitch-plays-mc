@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MessageController {
 
     public static Map<String, Long> flags = new ConcurrentHashMap<>();
-    public static long timestamp = System.currentTimeMillis();
+    public static long timestamp = System.currentTimeMillis(), pressDuration = 400L;
     public static boolean twitchPlays;
 
     static {
@@ -30,7 +30,7 @@ public class MessageController {
     }
 
     public static boolean shouldPress(String s) {
-        return timestamp - flags.get(s) < 300L;
+        return timestamp - flags.get(s) < pressDuration;
     }
 
 

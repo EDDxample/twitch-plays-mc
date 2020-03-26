@@ -2,6 +2,7 @@ package eddxample.twitch;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.Message;
+import com.mojang.brigadier.arguments.LongArgumentType;
 import net.minecraft.command.arguments.MessageArgumentType;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -18,14 +19,18 @@ public class TwitchCommand {
             .then(CommandManager.literal("stop")
                 .executes(context -> f3(context.getSource())))
             .then(CommandManager.literal("disconnect")
-                .executes(context -> f4(context.getSource()))));
+                .executes(context -> f4(context.getSource())))
+            .then(CommandManager.literal("pressDuration")
+                    .executes(context -> f5(context.getSource(), -1L))
+                .then(CommandManager.argument("milliseconds", LongArgumentType.longArg(0))
+                    .executes(context -> f5(context.getSource(), LongArgumentType.getLong(context, "milliseconds"))))));
     }
 
     /* Functions */
 
     /* tpmc */
     private static int f0(ServerCommandSource src) {
-        src.getMinecraftServer().getPlayerManager().sendToAll(new LiteralText(String.format("[§dTPMC§r] §7channel: %s, play: %s§r", ChatReader.channel, MessageController.twitchPlays ? "true" : "false")));
+        src.getMinecraftServer().getPlayerManager().sendToAll(new LiteralText(String.format("[§dTPMC§r] §7channel: %s, play: %s, pressDuration: %d§r", ChatReader.channel, MessageController.twitchPlays ? "true" : "false", MessageController.pressDuration)));
         return 1;
     }
 
@@ -61,10 +66,19 @@ public class TwitchCommand {
         if (ChatReader.channel == null) {
             src.getMinecraftServer().getPlayerManager().sendToAll(new LiteralText("[§dTPMC§r] §cConnect to a channel using §4/tpmc <twitch channel>§r"));
         } else {
-            MessageController.twitchPlays = false;
-            src.getMinecraftServer().getPlayerManager().sendToAll(new LiteralText("[§dTPMC§r] §dTwitch Plays MineCraft§7 disabled§r"));
+            if (MessageController.twitchPlays) {
+                MessageController.twitchPlays = false;
+                src.getMinecraftServer().getPlayerManager().sendToAll(new LiteralText("[§dTPMC§r] §dTwitch Plays MineCraft§7 disabled§r"));
+            }
             ChatReader.stop();
         }
+        return 1;
+    }
+
+    /* tpmc pressDuration <ms> */
+    private static int f5(ServerCommandSource src, long ms) {
+        if (ms >= 0) MessageController.pressDuration = ms;
+        src.getMinecraftServer().getPlayerManager().sendToAll(new LiteralText(String.format("[§dTPMC§r]§7 pressDuration = %d§r", MessageController.pressDuration)));
         return 1;
     }
 }
